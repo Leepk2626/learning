@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>神奇的磁铁家族｜一年级科学互动闯关</title>
+<style>
+:root{--ink:#24304b;--blue:#3188e8;--red:#f05c62;--yellow:#ffd95e;--green:#42bd91;--cream:#fff9e8}
+*{box-sizing:border-box}body{margin:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff3bd,#d9f5ff 55%,#f9ddff);min-height:100vh}
+.wrap{max-width:920px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:clamp(20px,4vw,30px);text-shadow:2px 2px white}.pill{background:#fff;border:2px solid #fff;border-radius:99px;padding:9px 15px;font-weight:800;box-shadow:0 4px 0 #d7e0ed}
+.progress{height:12px;background:#fff;border-radius:20px;margin:15px 0 20px;overflow:hidden;border:2px solid white}.bar{height:100%;width:0;background:linear-gradient(90deg,#46c9a0,#67a7ff);transition:width .3s}
+.card{background:rgba(255,255,255,.94);border:4px solid white;border-radius:28px;padding:clamp(18px,4vw,34px);box-shadow:0 12px 0 rgba(70,100,140,.12);position:relative}
+.kicker{color:#7b65cf;font-weight:900;letter-spacing:1px}.question{font-size:clamp(23px,4vw,32px);line-height:1.35;margin:10px 0 16px;font-weight:900}
+.scene{min-height:155px;border-radius:22px;background:linear-gradient(135deg,#fff1be,#dff7ff);display:flex;justify-content:center;align-items:center;gap:18px;padding:16px;margin:12px 0 20px;overflow:hidden}
+.bigemoji{font-size:clamp(42px,8vw,72px);filter:drop-shadow(0 5px 0 rgba(0,0,0,.08));animation:bob 2s infinite ease-in-out}
+@keyframes bob{50%{transform:translateY(-6px) rotate(3deg)}}
+.magnet{width:82px;height:88px;border:13px solid #ef565e;border-bottom:0;border-radius:22px 22px 0 0;position:relative;display:inline-block;transform:rotate(-8deg);margin:12px}
+.magnet:before{content:"N";position:absolute;top:-12px;left:-12px;background:#ef565e;color:white;border-radius:9px;padding:5px 8px;font-weight:900}
+.magnet:after{content:"S";position:absolute;top:-12px;right:-12px;background:#3788e8;color:white;border-radius:9px;padding:5px 8px;font-weight:900}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.option{border:3px solid #e1e8f5;border-radius:17px;background:white;padding:15px 14px;text-align:left;font-size:17px;font-weight:800;color:var(--ink);cursor:pointer;transition:.15s;min-height:62px}
+.option:hover{transform:translateY(-2px);border-color:#8dbbff;background:#f5faff}.option .letter{display:inline-grid;place-items:center;width:29px;height:29px;background:#edf2ff;border-radius:9px;margin-right:8px;color:#4568bf}
+.option.correct{border-color:#38bd8a;background:#e7fff4}.option.wrong{border-color:#ef6b72;background:#fff0f0}.option:disabled{cursor:default}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:16px;font-weight:800;display:none;line-height:1.5}.feedback.show{display:block}.feedback.good{background:#e5fff2;color:#13734f}.feedback.bad{background:#fff0e9;color:#a34b26}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}.btn{border:0;border-radius:15px;padding:13px 22px;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(31,65,100,.16)}.btn:disabled{opacity:.45;cursor:not-allowed}.primary{background:#4a91f4;color:white}.secondary{background:#fff0a8;color:#624b00}.tiny{font-size:13px;opacity:.75}.start,.result{text-align:center}.start h1,.result h1{font-size:clamp(30px,6vw,46px);margin:8px 0}.start p{font-size:18px;line-height:1.7}.hidden{display:none!important}.stars{font-size:35px;letter-spacing:4px}.scorebig{font-size:44px;color:#328bdf;font-weight:1000}.review{margin:18px auto;max-width:560px;text-align:left;line-height:1.8;background:#f4f8ff;border-radius:18px;padding:16px}
+@media(max-width:580px){.options{grid-template-columns:1fr}.scene{min-height:125px}.option{min-height:55px}.actions{align-items:stretch}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">🧲 神奇的磁铁家族</div><div class="pill">🏆 得分：<span id="score">0</span></div><div class="pill">🎯 第 <span id="num">1</span> / 20 题</div></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <section class="card start" id="start">
+    <div class="stars">⭐ 🧲 ⭐</div>
+    <h1>磁铁小勇士闯关赛！</h1>
+    <p>欢迎来到磁铁实验室！完成 <b>20 道选择题</b>，认识磁铁的形状、磁性、磁极和生活用途。<br>每题有 4 个选项，答对得 <b>10 分</b>，答错也能学习新知识！</p>
+    <div class="scene"><span class="bigemoji">🧲</span><span class="bigemoji">🧷</span><span class="bigemoji">🧲</span><span class="bigemoji">✨</span></div>
+    <button class="btn primary" onclick="begin()">🚀 开始冒险！</button>
+  </section>
+  <section class="card hidden" id="quiz">
+    <div class="kicker" id="category">磁铁实验室</div>
+    <div class="question" id="question"></div>
+    <div class="scene" id="scene"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback" role="status"></div>
+    <div class="actions"><span class="tiny" id="hint">认真观察，选出最正确的答案！</span><button class="btn primary" id="next" disabled onclick="nextQuestion()">下一题 ➜</button></div>
+  </section>
+  <section class="card result hidden" id="result">
+    <div class="stars" id="resultStars">🌟🌟🌟</div><h1>闯关完成！</h1>
+    <p>你已经完成了磁铁家族的科学挑战！</p>
+    <div class="scorebig"><span id="finalScore">0</span> 分</div>
+    <h2 id="rank"></h2><p id="message"></p>
+    <div class="review" id="review"></div>
+    <button class="btn primary" onclick="restart()">🔄 再玩一次</button>
+  </section>
+</div>
+<script>
+const qs=[
+{c:"秘密一｜磁铁在哪里？",q:"家里的哪一种物品，常常利用磁铁来吸住门？",pic:["🚪","🧲","✨"],opts:["冰箱门的磁吸门封","棉花枕头","木头勺子","纸巾"],a:0,why:"冰箱门边的磁吸门封会利用磁力帮助门关紧。"},
+{c:"秘密一｜生活中的用途",q:"指南针能帮助我们辨认方向，里面的重要部分是什么？",pic:["🧭","🗺️","🌞"],opts:["塑料片","磁针","橡皮筋","纸夹"],a:1,why:"指南针里的磁针会指向大致的南北方向。"},
+{c:"秘密一｜生活中的用途",q:"以下哪一样东西通常会用磁铁吸住纸张或小物件？",pic:["🧲","🧸","🍌"],opts:["毛绒玩具","磁性冰箱贴","香蕉","纸杯"],a:1,why:"磁性冰箱贴可以吸在冰箱等铁磁性表面上。"},
+{c:"秘密二｜磁铁家族大合照",q:"下面哪一个是常见的 U 形磁铁？",pic:["🧲","⭕","📏"],opts:["U 形磁铁","圆环","直尺","木块"],a:0,why:"U 形磁铁像字母 U，两端是磁极。"},
+{c:"秘密二｜磁铁家族大合照",q:"像长条一样的磁铁，叫什么形状？",pic:["🧱","🧲","🍩"],opts:["环形磁铁","条形磁铁","球形磁铁","三角磁铁"],a:1,why:"条形磁铁呈长条状，通常两端分别是 N 极和 S 极。"},
+{c:"秘密二｜磁铁家族大合照",q:"中间有一个洞、像甜甜圈的磁铁，可能是什么形状？",pic:["🍩","🥄","🧢"],opts:["条形磁铁","针形磁铁","环形磁铁","U 形磁铁"],a:2,why:"环形磁铁中间有孔，看起来像一个圆环。"},
+{c:"秘密二｜磁铁家族大合照",q:"哪一组全部都是常见的磁铁形状？",pic:["🧲","⭕","U"],opts:["条形、环形、U 形","叶形、花形、云形","苹果形、梨形、香蕉形","星星形、月亮形、太阳形"],a:0,why:"常见形状包括条形、棒形、环形、圆盘形、U 形和马蹄形等。"},
+{c:"秘密三｜磁铁的好朋友",q:"磁铁最容易吸引下面哪一种物品？",pic:["📎","🧻","🪵"],opts:["纸巾","木筷子","铁回形针","橡皮擦"],a:2,why:"回形针通常由铁或钢制成，能被磁铁吸引。"},
+{c:"秘密三｜磁铁的好朋友",q:"下面哪一种材料通常不会被普通磁铁吸引？",pic:["🔩","🥄","🪵"],opts:["铁钉","钢制回形针","木块","铁螺丝"],a:2,why:"木头不是磁铁通常会吸引的磁性材料。"},
+{c:"秘密三｜磁性分类挑战",q:"磁铁能吸引一些物体。哪一个说法正确？",pic:["🧲✨","🧸","📄"],opts:["所有金属都会被磁铁吸引","磁铁能吸引所有东西","磁铁能吸引铁等某些材料","磁铁只能吸引纸张"],a:2,why:"不是所有金属都会被普通磁铁吸引；铁、部分钢材等会被吸引。"},
+{c:"秘密三｜磁性分类挑战",q:"老师把铁钉、塑料尺和纸片放在桌上，磁铁最可能吸起哪一样？",pic:["🔩","📏","📄"],opts:["塑料尺","纸片","铁钉","三样都一样"],a:2,why:"铁钉含铁，通常会被磁铁吸引。"},
+{c:"秘密四｜磁铁的神秘代号",q:"磁铁的 N 极代表什么？",pic:["🧲 N","🧭","🌍"],opts:["北极","南极","中间点","没有特别意思"],a:0,why:"N 是 North 的缩写，表示北极。"},
+{c:"秘密四｜磁铁的神秘代号",q:"磁铁的 S 极代表什么？",pic:["🧲 S","🌞","🌙"],opts:["星星极","南极","北极","安全极"],a:1,why:"S 是 South 的缩写，表示南极。"},
+{c:"磁极魔法｜异极相吸",q:"把一块磁铁的 N 极靠近另一块磁铁的 S 极，会怎样？",pic:["🔴 N  ➜  S 🔵","✨","🤝"],opts:["互相吸引","互相排斥","两块磁铁消失","一定会发光"],a:0,why:"异极相吸：N 极和 S 极靠近时会互相吸引。"},
+{c:"磁极魔法｜同极相斥",q:"把 N 极靠近另一块磁铁的 N 极，会怎样？",pic:["🔴 N  ↔  N 🔴","💥","🌈"],opts:["互相吸引","互相排斥","变成 S 极","没有磁性了"],a:1,why:"同极相斥：N 与 N 相斥，S 与 S 也相斥。"},
+{c:"磁极魔法｜记口诀",q:"哪一句口诀正确？",pic:["N + S","N + N","🧲"],opts:["同极相吸，异极相斥","N 极永远吸引所有磁铁","异极相吸，同极相斥","磁极之间不会有作用"],a:2,why:"记住口诀：异极相吸，同极相斥！"},
+{c:"终极考验｜谁的磁力最强？",q:"比较两块磁铁吸起的回形针数量，哪一种结果可用来比较吸引能力？",pic:["🧲📎📎📎","🧲📎","🔍"],opts:["磁铁的颜色","吸起回形针的数量","磁铁的名字","桌子的颜色"],a:1,why:"在条件相近时，可以比较磁铁吸起的回形针数量。"},
+{c:"终极考验｜磁力与距离",q:"磁铁慢慢远离回形针，通常会发生什么？",pic:["🧲  ➜  📎","📏","👀"],opts:["吸引作用通常会变弱","磁铁会变成木头","回形针会变成纸","距离完全没有影响"],a:0,why:"距离增加时，磁铁对物体的吸引作用通常会减弱。"},
+{c:"科学小侦探｜判断对错",q:"磁铁隔着薄纸，仍可能吸引回形针吗？",pic:["🧲📄📎","🚫","🤔"],opts:["不可能","可能","只有晚上才可能","纸会变成磁铁"],a:1,why:"磁力可以穿过一些非磁性材料，例如薄纸。"},
+{c:"毕业挑战｜综合知识",q:"以下哪一项关于磁铁的说法是正确的？",pic:["🧲🏅","🧭","✨"],opts:["每块磁铁都有 N 极和 S 极","磁铁只会吸引塑料","N 极和 N 极互相吸引","磁铁只能做成一种形状"],a:0,why:"本课重点：磁铁有磁极、形状多样，能吸引某些材料；同极相斥、异极相吸。"}
+];
+let idx=0,score=0,answered=false,correctCount=0;
+const $=id=>document.getElementById(id);
+function begin(){$("start").classList.add("hidden");$("quiz").classList.remove("hidden");render()}
+function render(){
+ answered=false;const q=qs[idx];$("num").textContent=idx+1;$("score").textContent=score;$("bar").style.width=(idx/qs.length*100)+"%";
+ $("category").textContent=q.c;$("question").textContent=q.q;
+ $("scene").innerHTML=q.pic.map((p,i)=>`<span class="bigemoji" style="animation-delay:${i*.2}s">${p}</span>`).join("");
+ $("options").innerHTML="";$("feedback").className="feedback";$("feedback").textContent="";$("next").disabled=true;$("next").textContent=idx===qs.length-1?"查看成绩 🏆":"下一题 ➜";
+ q.opts.forEach((o,i)=>{const b=document.createElement("button");b.className="option";b.innerHTML=`<span class="letter">${"ABCD"[i]}</span>${o}`;b.onclick=()=>choose(i);$("options").appendChild(b)});
+ $("hint").textContent="答对得 10 分！选好答案后查看解析。";
+}
+function choose(n){
+ if(answered)return;answered=true;const q=qs[idx];const buttons=[...$("options").children];
+ buttons.forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add("correct");if(i===n&&i!==q.a)b.classList.add("wrong")});
+ const f=$("feedback");f.classList.add("show");if(n===q.a){score+=10;correctCount++;f.classList.add("good");f.innerHTML="🎉 太棒了！答对了，获得 <b>+10 分</b>！<br>"+q.why}else{f.classList.add("bad");f.innerHTML="💡 再记住这个知识点！正确答案是：<b>"+q.opts[q.a]+"</b>。<br>"+q.why}
+ $("score").textContent=score;$("next").disabled=false;$("hint").textContent="加油！继续挑战下一题。";
+}
+function nextQuestion(){if(!answered)return;idx++;if(idx<qs.length){render();window.scrollTo({top:0,behavior:"smooth"})}else finish()}
+function finish(){
+ $("quiz").classList.add("hidden");$("result").classList.remove("hidden");$("bar").style.width="100%";$("finalScore").textContent=score;
+ let rank,msg,stars;if(score>=180){rank="🏆 磁铁科学小博士！";msg="太厉害了！你已经掌握了大部分磁铁知识。";stars="🌟🌟🌟"}else if(score>=130){rank="🥇 磁铁探险家！";msg="表现很棒！再复习一下错题，你会更厉害。";stars="🌟🌟✨"}else{rank="🧲 勇敢的磁铁学徒！";msg="完成挑战就是进步！再玩一次，看看能否拿到更多分数。";stars="🌟✨✨"}
+ $("rank").textContent=rank;$("message").textContent=`你答对了 ${correctCount} / 20 题。${msg}`;$("resultStars").textContent=stars;
+ $("review").innerHTML="<b>🎒 过关知识小锦囊</b><br>• 磁铁能吸引铁等某些材料，并不是所有金属。<br>• 常见形状有条形、环形、U 形等。<br>• N 是北极，S 是南极。<br>• 异极相吸，同极相斥。<br>• 距离增加时，吸引作用通常会减弱。";
+}
+function restart(){idx=0;score=0;correctCount=0;$("result").classList.add("hidden");$("quiz").classList.remove("hidden");render();window.scrollTo({top:0,behavior:"smooth"})}
+</script>
+</body>
+</html>
