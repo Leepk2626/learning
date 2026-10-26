@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一年级华文猜字大闯关</title>
+<style>
+:root{--ink:#24324a;--paper:#fffdf5;--blue:#dff4ff;--pink:#ffe5ef;--yellow:#fff0ad;--green:#dff7df;--purple:#eee5ff}
+*{box-sizing:border-box} body{margin:0;font-family:"Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:linear-gradient(135deg,#dff7ff,#fff0f6 55%,#fff7cf);min-height:100vh}
+main{max-width:900px;margin:auto;padding:18px}.hero{background:#fff;border:4px solid #fff;border-radius:26px;padding:20px;text-align:center;box-shadow:0 8px 0 #b9d8e8}
+h1{margin:0;font-size:clamp(26px,5vw,42px);color:#3754a5}.sub{font-size:17px;margin:8px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}.pill{background:var(--yellow);border-radius:999px;padding:8px 14px;font-weight:bold}
+.panel{background:var(--paper);border:3px solid white;border-radius:24px;padding:18px;margin-top:16px;box-shadow:0 6px 0 #d7dce9}
+.topline{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-weight:bold}
+.progress{height:12px;background:#e8eaf2;border-radius:99px;overflow:hidden;margin:10px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,#55c8a5,#ffd15c);transition:width .3s}
+.art{font-size:clamp(56px,12vw,100px);text-align:center;line-height:1.3;background:linear-gradient(135deg,#e4f7ff,#fff0f6);border-radius:20px;padding:10px;margin:14px 0}
+.question{text-align:center;font-size:clamp(21px,4vw,30px);font-weight:800;margin:10px 0}
+.hint{text-align:center;font-size:16px;color:#53617b;min-height:26px}
+.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+button{font:inherit;cursor:pointer;border:0;border-radius:16px;padding:13px 12px;font-weight:800;transition:transform .12s,filter .12s}
+button:hover{filter:brightness(.97);transform:translateY(-2px)}button:focus{outline:3px solid #506ad6;outline-offset:2px}
+.choice{background:#fff;border:3px solid #d9e2f3;font-size:20px;min-height:58px}.choice.correct{background:#d9f8dc;border-color:#50b76b}.choice.wrong{background:#ffe0e0;border-color:#e87979}
+.primary{background:#5269d9;color:white;box-shadow:0 4px 0 #3547a5}.secondary{background:#ffe08a;color:#533d00;box-shadow:0 4px 0 #d6ad42}.soft{background:#e7e9ff;color:#303d91}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}.controls button{min-width:125px}
+.feedback{min-height:34px;text-align:center;font-weight:bold;font-size:18px;margin:8px 0}.feedback.good{color:#168044}.feedback.try{color:#b24b30}
+.writebox{display:flex;gap:8px;max-width:500px;margin:12px auto}.writebox input{flex:1;min-width:0;border:2px solid #d9e2f3;border-radius:12px;padding:12px;font-size:20px;text-align:center}
+.hidden{display:none!important}.end{text-align:center}.bigscore{font-size:44px;font-weight:900;color:#5269d9}.small{font-size:14px;color:#64708a}
+@media(max-width:520px){main{padding:10px}.panel{padding:12px}.answers{grid-template-columns:1fr}.choice{min-height:50px}.hero{padding:15px}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+  <div style="font-size:42px">🐼 🧩 ⭐</div>
+  <h1>一年级华文猜字大闯关</h1>
+  <p class="sub">看图猜一猜 · 认部件 · 写汉字！答对得星星，三关挑战开始啦！</p>
+  <div class="row"><span class="pill">🟢 第一关：简易</span><span class="pill" style="background:#ffd9e8">🟡 第二关：中等</span><span class="pill" style="background:#e6ddff">🔴 第三关：挑战</span></div>
+  <div class="small">小提示：每题答错后还可以再选；按“显示答案”会听到汉字读音。声音需要浏览器允许播放。</div>
+</section>
+<section class="panel" id="game">
+  <div class="topline"><span id="stageLabel">第一关 · 简易</span><span>⭐ 得分：<span id="score">0</span></span><span id="count">第 1 / 15 题</span></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="art" id="art">👧 ＋ 🐴</div>
+  <div class="question" id="question">猜一猜，这是什么字？</div>
+  <div class="hint" id="hint">先按“开始本题”听题并开始作答！</div>
+  <div class="answers" id="answers"></div>
+  <div class="writebox hidden" id="writebox"><input id="typed" maxlength="2" placeholder="在这里写一个汉字"><button class="secondary" id="checkWrite">检查</button></div>
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <div class="controls">
+    <button class="primary" id="startBtn">▶ 开始本题</button>
+    <button class="soft" id="speakBtn">🔊 再听一次</button>
+    <button class="secondary" id="revealBtn">💡 显示答案</button>
+    <button class="primary" id="nextBtn">➡ 下一题</button>
+  </div>
+</section>
+<section class="panel end hidden" id="finish">
+  <div style="font-size:64px">🏆🎉🐼</div><h2>恭喜完成三关！</h2>
+  <div class="bigscore" id="finalScore">0 分</div>
+  <p id="summary"></p><p>你已经完成 15 道猜字题！继续观察汉字的部件，成为猜字小达人。</p>
+  <div class="controls"><button class="primary" id="restartBtn">🔁 再玩一次</button></div>
+</section>
+</main>
+<script>
+const questions = [
+ {stage:0,level:"简易",art:"👧 ＋ 🐴",q:"女字旁，加上“马”，猜一个字。",opts:["妈","好","姐","她"],a:"妈",why:"女 + 马 = 妈。妈妈的“妈”！",type:"choice"},
+ {stage:0,level:"简易",art:"☀️ ＋ 🚪",q:"太阳在门里面，猜一个字。",opts:["间","问","闪","明"],a:"间",why:"门里面有日，就是“间”。",type:"choice"},
+ {stage:0,level:"简易",art:"🌳 ＋ 🐑",q:"木字旁，加上“羊”，猜一个字。",opts:["样","林","校","相"],a:"样",why:"木 + 羊 = 样。样子的“样”！",type:"choice"},
+ {stage:0,level:"简易",art:"☀️ ＋ 🌙",q:"太阳和月亮在一起，猜一个字。",opts:["明","朋","早","星"],a:"明",why:"日 + 月 = 明，表示明亮。",type:"choice"},
+ {stage:0,level:"简易",art:"👄 ＋ 🐮（牛尾巴不见了）",q:"一口咬掉牛尾巴，猜一个字。",opts:["告","吃","牛","舌"],a:"告",why:"“告”可以想成上面像牛去掉尾巴，下面加上口。",type:"choice"},
+ {stage:1,level:"中等",art:"🔺 小小在上 ＋ 🟫 大大在下",q:"上面小，下面大，猜一个字。请自己写。",opts:[],a:"尖",why:"“尖”字上面是小，下面是大。",type:"write"},
+ {stage:1,level:"中等",art:"🌲 🌲",q:"两棵木排在一起，猜一个字。",opts:["林","森","本","休"],a:"林",why:"两个“木”组成“林”。",type:"choice"},
+ {stage:1,level:"中等",art:"🧍 ＋ 🌳",q:"一个人靠着木头休息，猜一个字。",opts:["休","体","木","人"],a:"休",why:"人 + 木 = 休，休息的“休”。",type:"choice"},
+ {stage:1,level:"中等",art:"⛰️ ＋ 🧍",q:"人站在山旁边，想一想“仙”由什么组成？",opts:["仙","山","休","从"],a:"仙",why:"人（亻） + 山 = 仙。",type:"choice"},
+ {stage:1,level:"中等",art:"🐛 ＋ 它",q:"左边是虫，右边是“它”，猜一个字。",opts:["蛇","蚂","蛙","虹"],a:"蛇",why:"虫 + 它 = 蛇。",type:"choice"},
+ {stage:2,level:"挑战",art:"👄 ＋ 天（上面有口）",q:"“天”字上面加一张口，猜一猜。",opts:["吞","吴","告","呆"],a:"吞",why:"“吞”上面是天，下面是口。",type:"choice"},
+ {stage:2,level:"挑战",art:"🤏 小 ＋ 🟫 土",q:"“小”和“土”组合起来，猜一个字。",opts:["尘","尖","尧","地"],a:"尘",why:"小 + 土 = 尘，灰尘的“尘”。",type:"choice"},
+ {stage:2,level:"挑战",art:"🧍 ＋ 一 ＋ 👄",q:"“人”、一横和“口”组合起来，猜一个字。",opts:["合","含","会","全"],a:"合",why:"人字头下面加一横和口，组成“合”，合作的“合”。",type:"choice"},
+ {stage:2,level:"挑战",art:"🌧️ ☁️ ❄️",q:"雨落下来，天气很冷，天空飘下白色的雪花。猜一个字。",opts:["雪","雨","云","雷"],a:"雪",why:"雨字头下面像雪的形状，合起来是“雪”。",type:"choice"},
+ {stage:2,level:"挑战",art:"🪵 ＋ 🪵 ＋ 🪵",q:"三个“木”合起来，猜一个字。",opts:["森","林","树","本"],a:"森",why:"三个“木”组成“森”，表示树木很多。",type:"choice"}
+];
+let index=0, score=0, started=false, answered=false, revealed=false, correctSet=new Set();
+const $=id=>document.getElementById(id);
+function speak(text){if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=.82;window.speechSynthesis.speak(u)}
+function stageName(s){return ["第一关 · 简易","第二关 · 中等","第三关 · 挑战"][s]}
+function render(){
+ const q=questions[index]; started=false;answered=false;revealed=false;
+ $("stageLabel").textContent=stageName(q.stage);$("count").textContent=`第 ${index+1} / ${questions.length} 题`;
+ $("score").textContent=score;$("bar").style.width=(index/questions.length*100)+"%";
+ $("art").textContent=q.art;$("question").textContent=q.q;$("hint").textContent="先按“开始本题”，准备好就来挑战！";
+ $("feedback").textContent="";$("feedback").className="feedback";$("startBtn").disabled=false;
+ $("answers").innerHTML="";$("writebox").classList.toggle("hidden",q.type!=="write");
+ $("typed").value="";
+ if(q.type==="choice"){
+   q.opts.forEach(opt=>{const b=document.createElement("button");b.className="choice";b.textContent=opt;b.disabled=true;b.onclick=()=>choose(opt,b);$("answers").appendChild(b)});
+ }
+ $("nextBtn").textContent=index===questions.length-1?"🏁 完成闯关":"➡ 下一题";
+ $("revealBtn").disabled=false;$("speakBtn").disabled=false;
+}
+function begin(){started=true;$("startBtn").disabled=true;$("hint").textContent="请观察图片，选择正确汉字，或自己写出来！";speak(questions[index].q);[...$("answers").children].forEach(b=>b.disabled=false);$("typed").disabled=false}
+function choose(opt,btn){
+ if(!started||answered)return;
+ const q=questions[index];
+ if(opt===q.a){answered=true;btn.classList.add("correct");if(!correctSet.has(index)){score+=10;correctSet.add(index)}$("score").textContent=score;$("feedback").textContent="🎉 答对了！+10 分！";$("feedback").className="feedback good";$("hint").textContent=q.why;speak(q.a+"。"+q.why);[...$("answers").children].forEach(b=>{b.disabled=true;if(b.textContent===q.a)b.classList.add("correct")});}
+ else{btn.classList.add("wrong");btn.disabled=true;$("feedback").textContent="再想一想！还有一次机会，试试其他答案。";$("feedback").className="feedback try";speak("再想一想");}
+}
+function checkWrite(){if(!started||answered)return;const q=questions[index];const val=$("typed").value.trim();if(val===q.a){answered=true;if(!correctSet.has(index)){score+=10;correctSet.add(index)}$("score").textContent=score;$("feedback").textContent="太棒了！写对了！+10 分！";$("feedback").className="feedback good";$("hint").textContent=q.why;speak(q.a+"。"+q.why);$("typed").disabled=true;}else{$("feedback").textContent="还差一点，再试一次！也可以按“显示答案”学习。";$("feedback").className="feedback try";speak("再试一次");}}
+function reveal(){const q=questions[index];revealed=true;$("hint").textContent="正确答案："+q.a+"。"+q.why;$("feedback").textContent="📖 看清答案，跟着读一读！";$("feedback").className="feedback good";speak("答案是："+q.a+"。"+q.why);[...$("answers").children].forEach(b=>{b.disabled=true;if(b.textContent===q.a)b.classList.add("correct")});if(q.type==="write")$("typed").value=q.a;answered=true;}
+function next(){if(index<questions.length-1){index++;render()}else{ $("game").classList.add("hidden");$("finish").classList.remove("hidden");$("finalScore").textContent=score+" 分";$("summary").textContent=`你答对并获得奖励的题目共 ${correctSet.size} 题，收集了 ${score/10} 颗星星！`; $("bar").style.width="100%";speak("恭喜完成三关！你真棒！");}}
+$("startBtn").onclick=begin;$("speakBtn").onclick=()=>speak(questions[index].q);$("revealBtn").onclick=reveal;$("nextBtn").onclick=next;$("checkWrite").onclick=checkWrite;
+$("typed").addEventListener("keydown",e=>{if(e.key==="Enter")checkWrite()});
+$("restartBtn").onclick=()=>{index=0;score=0;correctSet=new Set();$("finish").classList.add("hidden");$("game").classList.remove("hidden");render();speak("准备好了吗？猜字闯关开始！")};
+render();
+</script>
+</body>
+</html>
